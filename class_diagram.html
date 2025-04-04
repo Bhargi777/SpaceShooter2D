@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Shooter 2D - Class Diagram</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .class-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .class-box {
+            background-color: white;
+            border: 2px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            min-width: 250px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .class-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #2c3e50;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .class-attributes {
+            margin: 10px 0;
+        }
+        .class-methods {
+            margin: 10px 0;
+        }
+        .attribute, .method {
+            font-family: monospace;
+            margin: 5px 0;
+        }
+        .relationship {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .legend {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .legend-item {
+            margin: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Space Shooter 2D - Class Diagram</h1>
+        
+        <div class="class-diagram">
+            <!-- Main Game Class -->
+            <div class="class-box">
+                <div class="class-name">Game</div>
+                <div class="class-attributes">
+                    <div class="attribute">- gameWindow: GameWindow</div>
+                    <div class="attribute">- gamePanel: GamePanel</div>
+                    <div class="attribute">- gameThread: Thread</div>
+                    <div class="attribute">- levelManager: LevelManager</div>
+                    <div class="attribute">- menu: Menu</div>
+                    <div class="attribute">- resume: Resume</div>
+                    <div class="attribute">- FPS_SET: int = 120</div>
+                    <div class="attribute">- UPS_SET: int = 200</div>
+                </div>
+                <div class="class-methods">
+                    <div class="method">+ Game()</div>
+                    <div class="method">+ run(): void</div>
+                    <div class="method">- update(): void</div>
+                    <div class="method">+ render(Graphics): void</div>
+                    <div class="method">+ getLevelManager(): LevelManager</div>
+                </div>
+            </div>
+
+            <!-- GamePanel Class -->
+            <div class="class-box">
+                <div class="class-name">GamePanel</div>
+                <div class="class-attributes">
+                    <div class="attribute">- mouseInputs: MouseInputs</div>
+                    <div class="attribute">- game: Game</div>
+                </div>
+                <div class="class-methods">
+                    <div class="method">+ GamePanel(Game)</div>
+                    <div class="method">+ paintComponent(Graphics): void</div>
+                    <div class="method">+ getGame(): Game</div>
+                </div>
+            </div>
+
+            <!-- GameWindow Class -->
+            <div class="class-box">
+                <div class="class-name">GameWindow</div>
+                <div class="class-attributes">
+                    <div class="attribute">- jframe: JFrame</div>
+                </div>
+                <div class="class-methods">
+                    <div class="method">+ GameWindow(GamePanel)</div>
+                </div>
+            </div>
+
+            <!-- LevelManager Class -->
+            <div class="class-box">
+                <div class="class-name">LevelManager</div>
+                <div class="class-attributes">
+                    <div class="attribute">- game: Game</div>
+                </div>
+                <div class="class-methods">
+                    <div class="method">+ LevelManager(Game)</div>
+                    <div class="method">+ update(): void</div>
+                    <div class="method">+ draw(Graphics): void</div>
+                </div>
+            </div>
+
+            <!-- Menu Class -->
+            <div class="class-box">
+                <div class="class-name">Menu</div>
+                <div class="class-methods">
+                    <div class="method">+ render(Graphics): void</div>
+                </div>
+            </div>
+
+            <!-- Resume Class -->
+            <div class="class-box">
+                <div class="class-name">Resume</div>
+                <div class="class-methods">
+                    <div class="method">+ render(Graphics): void</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="relationship">
+            Game → GamePanel → GameWindow
+            Game → LevelManager
+            Game → Menu
+            Game → Resume
+        </div>
+
+        <div class="legend">
+            <h3>Legend</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: white;"></div>
+                <span>Class Box</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #f8f9fa;"></div>
+                <span>Attributes</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #e9ecef;"></div>
+                <span>Methods</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
