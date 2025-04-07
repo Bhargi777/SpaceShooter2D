@@ -1,0 +1,255 @@
+@startuml Space Shooter 2D
+
+' Style settings
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    ArrowColor Black
+    BorderColor Black
+}
+
+' Package declarations
+package "spaceShooter" {
+    class Game {
+        - GameWindow gameWindow
+        - GamePanel gamePanel
+        - Thread gameThread
+        - LevelManager levelManager
+        - BufferedImage backGroundImage
+        - Menu menu
+        - Resume resume
+        - boolean running
+        - int FPS_SET
+        - int UPS_SET
+        + static int TILES_DEFAULT_SIZE
+        + static float SCALE
+        + static int TILES_IN_WIDTH
+        + static int TILES_IN_HEIGHT
+        + static int TILES_SIZE
+        + static int GAME_WIDTH
+        + static int GAME_HEIGHT
+        + static GameState state
+        + Game()
+        - void initClasses()
+        - void startGameLoop()
+        + void stop()
+        + void run()
+        + static void main(String[] args)
+    }
+
+    class GameWindow {
+        - JFrame jframe
+        + GameWindow(GamePanel gamePanel)
+        - void initWindow()
+    }
+
+    class GamePanel {
+        - Game game
+        + GamePanel(Game game)
+        + void paintComponent(Graphics g)
+        + void updateGame()
+    }
+}
+
+package "UI" {
+    class Menu {
+        # int height
+        # int width
+        # Rectangle playButton
+        # Rectangle helpButton
+        # Rectangle quitButton
+        + void render(Graphics g)
+        # void Help()
+    }
+
+    class Resume {
+        # int height
+        # int width
+        # Rectangle resumeButton
+        # Rectangle quitButton
+        + void render(Graphics g)
+    }
+}
+
+package "inputs" {
+    class MouseInputs {
+        - GamePanel gamePanel
+        - Rectangle playButton
+        - Rectangle helpButton
+        - Rectangle quitButton
+        - int width
+        - int height
+        + MouseInputs(GamePanel gamePanel)
+        - void initButtons()
+        # void Help()
+        + void mousePressed(MouseEvent e)
+    }
+
+    class KeyBoardinputs {
+        - GamePanel gamePanel
+        + KeyBoardinputs(GamePanel gamePanel)
+        + void keyPressed(KeyEvent e)
+        + void keyReleased(KeyEvent e)
+    }
+}
+
+package "levels" {
+    class LevelManager {
+        - Game game
+        - Player player
+        - Background bg
+        # EnemyManager enemyManager
+        - BulletsManager bulletsManager
+        + LevelManager(Game game)
+        + void draw(Graphics g)
+        + void update()
+        + void windowFocusLost()
+        + Player getPlayer()
+    }
+
+    class EnemyManager {
+        - ArrayList<EnemyShip> enemyShips
+        - ArrayList<Point> arrayCoordinates
+        - BulletsManager bulletsManager
+        - int maxLevel
+        + static int currentLevelEnemy
+        - int LevelOneCountDown
+        - int LevelTwoCountDown
+        - int LevelThreeCountDown
+        - int LevelFourCountDown
+        - int LevelFiveCountDown
+        + static int currentLevel
+        - int[][] currentState
+        + EnemyManager(BulletsManager bulletsManager)
+        + void LevelOne()
+        + void LevelTwo()
+        + void LevelThree()
+        + void LevelFour()
+        + void LevelFive()
+    }
+
+    class BulletsManager {
+        - ArrayList<Bullet> bullets
+        + BulletsManager()
+        + void addBullet(float x, float y)
+        + void update()
+        + void render(Graphics g)
+    }
+
+    class Background {
+        - BufferedImage bg
+        + Background()
+        + void render(Graphics g)
+    }
+}
+
+package "entities" {
+    abstract class Entity {
+        # float x
+        # float y
+        # int width
+        # int height
+        + Entity(float x, float y, int width, int height)
+        + abstract void update()
+        + abstract void render(Graphics g)
+    }
+
+    class Player {
+        - BufferedImage imgMain
+        - boolean up,down,right,left
+        # float playerSpeed
+        # float playerHeight
+        - BulletsManager bulletsManager
+        - boolean canShoot
+        - int bulletCooldown
+        - final int COOLDOWN
+        + Player(float x, float y, int width, int height, BulletsManager bulletsManager)
+        + void update()
+        - void bulletReloadTime()
+        + void render(Graphics g)
+        - void updatePos()
+        + void handleShoot()
+    }
+
+    class EnemyShip {
+        - boolean moveToRight
+        - BulletsManager bulletsManager
+        - BufferedImage imgMain
+        + EnemyShip(float x, float y, int width, int height, boolean moveToRight, BulletsManager bulletsManager, String enemyType)
+        + void update()
+        + void render(Graphics g)
+    }
+
+    class Bullet {
+        - float x
+        - float y
+        - float speed
+        - boolean isPlayerBullet
+        + Bullet(float x, float y, boolean isPlayerBullet)
+        + void update()
+        + void render(Graphics g)
+    }
+}
+
+package "utilz" {
+    class LoadSave {
+        + static String UI_BACK_G
+        + static String UI_TABLE
+        + static String UI_BUTTON
+        + static String BACKG_ATLUS
+        + static String BULLETS_ATLUS
+        + static String LEVEL_ONE
+        + static String MAIN_PLAYER
+        + static String LEVEL_TWO_ENEMY
+        + static String LEVEL_TWO
+        + static String LEVEL_THREE_ENEMY
+        + static String LEVEL_THREE
+        + static String LEVEL_FOUR_ENEMY
+        + static String LEVEL_FOUR
+        + static String LEVEL_FIVE_ENEMY
+        + static String LEVEL_FIVE
+        + static BufferedImage GetSpriteAtlas(String fileName)
+    }
+
+    class Constants {
+        + static class Directions
+        + static class PlayerConstants
+        + static class EnemyConstants
+    }
+}
+
+' Interfaces
+interface Upgrade_Level {
+    + void LevelOne()
+    + void LevelTwo()
+    + void LevelThree()
+    + void LevelFour()
+    + void LevelFive()
+}
+
+' Relationships
+Game --> GameWindow
+Game --> GamePanel
+Game --> LevelManager
+Game --> Menu
+Game --> Resume
+
+GamePanel --> MouseInputs
+GamePanel --> KeyBoardinputs
+
+LevelManager --> Player
+LevelManager --> EnemyManager
+LevelManager --> BulletsManager
+LevelManager --> Background
+
+EnemyManager ..|> Upgrade_Level
+EnemyManager --> BulletsManager
+EnemyManager --> EnemyShip
+
+MouseInputs --|> Menu
+
+Player --|> Entity
+EnemyShip --|> Entity
+Bullet --|> Entity
+
+@enduml 

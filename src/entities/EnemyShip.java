@@ -40,13 +40,13 @@ public class EnemyShip extends Entity {
 		} else {
 			offset -= 0.5f;//Left MoveMent
 		}
-		/*if (offset <= 0) {
+		if (offset <= 0) {
 			up=true;
 		} else if (offset >= Game.TILES_SIZE){
 			up = false;
 		}
 		if(up)yOffset+=0.4f;
-		else yOffset-=0.4f;*/
+		else yOffset-=0.4f;
 
 	}
 
