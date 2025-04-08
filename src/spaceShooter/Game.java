@@ -12,7 +12,7 @@ import levels.LevelManager;
 import utilz.LoadSave;
 
 /**
- * Main game class that handles the game loop, window management, and state transitions.
+ * Main game class that handles the game loop, window  state transitions.
  * Controls the overall game flow and rendering.
  */
 public class Game implements Runnable {
@@ -43,7 +43,7 @@ public class Game implements Runnable {
 	 */
 	public enum GameState { 
 		MENU,    // Main menu state
-		GAME,    // Active gameplay state
+		GAME,   
 		RESUME,  // Pause/resume menu state
 		NEXT     // Level transition state
 	}
