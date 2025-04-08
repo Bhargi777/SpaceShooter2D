@@ -16,7 +16,7 @@ import inputs.KeyBoardinputs;
 import inputs.MouseInputs;
 
 /**
- * GamePanel class handles the main game display area and input handling.
+ 
  * Extends JPanel to provide custom rendering and input capabilities.
  */
 public class GamePanel extends JPanel {

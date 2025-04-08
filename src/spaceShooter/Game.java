@@ -90,7 +90,7 @@ public class Game implements Runnable {
 		this.resume = tempResume;
 		this.levelManager = tempLevelManager;
 		this.gamePanel = tempGamePanel;
-		this.gameWindow = tempGameWindow;
+		this.setGameWindow(tempGameWindow);
 	}
 
 	/*-----------------Creating & Starting Thread For Game---------------*/
@@ -225,5 +225,13 @@ public class Game implements Runnable {
 
 	public static void main(String[] args) {
 		new Game();
+	}
+
+	public GameWindow getGameWindow() {
+		return gameWindow;
+	}
+
+	public void setGameWindow(GameWindow gameWindow) {
+		this.gameWindow = gameWindow;
 	}
 }

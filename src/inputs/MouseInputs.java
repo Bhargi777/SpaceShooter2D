@@ -17,7 +17,7 @@ public class MouseInputs extends Menu implements MouseListener, MouseMotionListe
 	private int height = 50;
 
 	public MouseInputs(GamePanel gamePanel) {
-		this.gamePanel = gamePanel;
+		this.setGamePanel(gamePanel);
 		initButtons();
 	}
 
@@ -121,5 +121,13 @@ public class MouseInputs extends Menu implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// Not used in this implementation
+	}
+
+	public GamePanel getGamePanel() {
+		return gamePanel;
+	}
+
+	public void setGamePanel(GamePanel gamePanel) {
+		this.gamePanel = gamePanel;
 	}
 }
