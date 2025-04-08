@@ -225,31 +225,44 @@ interface Upgrade_Level {
     + void LevelThree()
     + void LevelFour()
     + void LevelFive()
+    + void Score()
 }
 
 ' Relationships
-Game --> GameWindow
-Game --> GamePanel
+' Composition (strong ownership)
+Game *-- GameWindow
+Game *-- GamePanel
+LevelManager *-- Player
+LevelManager *-- EnemyManager
+LevelManager *-- BulletsManager
+LevelManager *-- Background
+
+' Aggregation (weak ownership)
+EnemyManager o-- EnemyShip
+BulletsManager o-- Bullet
+
+' Associations
 Game --> LevelManager
 Game --> Menu
 Game --> Resume
-
 GamePanel --> MouseInputs
 GamePanel --> KeyBoardinputs
-
-LevelManager --> Player
-LevelManager --> EnemyManager
-LevelManager --> BulletsManager
-LevelManager --> Background
-
-EnemyManager ..|> Upgrade_Level
 EnemyManager --> BulletsManager
-EnemyManager --> EnemyShip
-
 MouseInputs --|> Menu
 
+' Inheritance
+EnemyManager ..|> Upgrade_Level
 Player --|> Entity
 EnemyShip --|> Entity
 Bullet --|> Entity
+
+' Cardinality (directly on relationships)
+Game *-- "1" GameWindow
+Game *-- "1" GamePanel
+LevelManager *-- "1" Player
+LevelManager *-- "1..*" EnemyManager
+LevelManager *-- "1..*" BulletsManager
+EnemyManager o-- "1..*" EnemyShip
+BulletsManager o-- "1..*" Bullet
 
 @enduml 

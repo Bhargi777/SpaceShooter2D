@@ -44,4 +44,9 @@ public class Resume {
 
 
     }
+
+    public void update() {
+        // Resume state update logic
+        // This can be expanded later for animations or other resume menu interactions
+    }
 }

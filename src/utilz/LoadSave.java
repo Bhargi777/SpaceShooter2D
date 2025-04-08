@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -39,35 +41,33 @@ public class LoadSave {
 	/*Method to Upload */
 	public static BufferedImage GetSpriteAtlas(String fileName) {
 		if (fileName == null || fileName.trim().isEmpty()) {
-			System.err.println("Error: File name is null or empty");
-			return null;
+			throw new IllegalArgumentException("File name cannot be null or empty");
 		}
 
 		try {
-			// First try to load from the res folder
-			File file = new File("res/" + fileName);
-			if (file.exists()) {
-				return ImageIO.read(file);
-			}
-
-			// If not found in res folder, try classpath
+			// Try loading from classpath first (preferred method)
 			InputStream it = LoadSave.class.getResourceAsStream("/" + fileName);
 			if (it != null) {
 				return ImageIO.read(it);
 			}
 
-			// If still not found, try res folder with absolute path
-			file = new File(System.getProperty("user.dir") + "/res/" + fileName);
+			// If not found in classpath, try res folder
+			Path resPath = Paths.get("res", fileName);
+			File file = resPath.toFile();
 			if (file.exists()) {
 				return ImageIO.read(file);
 			}
 
-			System.err.println("Error: Could not find resource: " + fileName);
-			return null;
+			// If still not found, try absolute path
+			Path absolutePath = Paths.get(System.getProperty("user.dir"), "res", fileName);
+			file = absolutePath.toFile();
+			if (file.exists()) {
+				return ImageIO.read(file);
+			}
+
+			throw new IOException("Resource not found: " + fileName);
 		} catch (IOException e) {
-			System.err.println("Error loading image: " + fileName);
-			e.printStackTrace();
-			return null;
+			throw new RuntimeException("Failed to load image: " + fileName, e);
 		}
 	}
 

@@ -119,13 +119,8 @@ public class Game implements Runnable {
 				updates = 0;
 			}
 
-			// Sleep to prevent CPU overuse
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				System.err.println("Game thread interrupted: " + e.getMessage());
-				running = false;
-			}
+			// Use yield instead of sleep for better performance
+			Thread.yield();
 		}
 	}
 
@@ -137,16 +132,21 @@ public class Game implements Runnable {
 					levelManager.update();
 					break;
 				case RESUME:
-					// Resume state handling
+					resume.update();
 					break;
 				case MENU:
-				case NEXT:
-					// Other states
+					menu.update();
 					break;
+				case NEXT:
+					// Handle level transition or next state
+					break;
+				default:
+					throw new IllegalStateException("Unknown game state: " + state);
 			}
 		} catch (Exception e) {
 			System.err.println("Error in game update: " + e.getMessage());
 			e.printStackTrace();
+			// Don't exit the game, just log the error
 		}
 	}
 
@@ -169,12 +169,15 @@ public class Game implements Runnable {
 					resume.render(g);
 					break;
 				case NEXT:
-					// Next state rendering
+					// Handle next state rendering
 					break;
+				default:
+					throw new IllegalStateException("Unknown game state: " + state);
 			}
 		} catch (Exception e) {
 			System.err.println("Error in game render: " + e.getMessage());
 			e.printStackTrace();
+			// Don't exit the game, just log the error
 		}
 	}
 

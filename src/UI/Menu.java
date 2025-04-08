@@ -48,4 +48,9 @@ public class Menu {
     protected void Help(){
         System.out.println("\n----------------Thank You------------We can't Help You\n");
     }
+
+    public void update() {
+        // Menu state update logic
+        // This can be expanded later for animations or other menu interactions
+    }
 }
