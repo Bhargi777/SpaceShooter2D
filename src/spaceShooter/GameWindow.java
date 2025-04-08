@@ -17,30 +17,48 @@ import java.awt.event.WindowFocusListener;
 
 import javax.swing.JFrame;
 
+/**
+ * GameWindow class manages the main application window.
+ * Handles window creation, focus events, and game panel integration.
+ */
 public class GameWindow {
-	private JFrame jframe;
-	public GameWindow(GamePanel gamepanel) {
-		jframe= new JFrame();
-		
-		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//To set Exit click to  close
-		jframe.add(gamepanel);//jframe adding gamePanel.
-		jframe.setResizable(true);//for customize gameWindow by Users.
+	private final JFrame jframe;
+
+	/**
+	 * Creates a new game window with the specified game panel.
+	 *
+	 * @param gamePanel The game panel to display in the window
+	 * @throws IllegalArgumentException if gamePanel is null
+	 */
+	public GameWindow(GamePanel gamePanel) {
+		if (gamePanel == null) {
+			throw new IllegalArgumentException("GamePanel cannot be null");
+		}
+
+		jframe = new JFrame("Space Shooter 2D");
+		setupWindow(gamePanel);
+		setupFocusListener(gamePanel);
+	}
+
+	private void setupWindow(GamePanel gamePanel) {
+		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		jframe.add(gamePanel);
+		jframe.setResizable(false); // Prevent window resizing for consistent gameplay
 		jframe.pack();
-		jframe.setVisible(true);//Initially visibility is false we have to give pass 'true' for visibility of window.
+		jframe.setLocationRelativeTo(null); // Center the window
+		jframe.setVisible(true);
+	}
 
-		/*-------All about focus of game Window------*/
+	private void setupFocusListener(GamePanel gamePanel) {
 		jframe.addWindowFocusListener(new WindowFocusListener() {
-
 			@Override
 			public void windowGainedFocus(WindowEvent e) {
-				
-				
+				// Can be used to resume game or update UI when window gains focus
 			}
 
 			@Override
 			public void windowLostFocus(WindowEvent e) {
-				gamepanel.getGame().getLevelManager().windowFocusLost();//gamePanel--->Game--->levelManager---->checking focus of window
-				
+				gamePanel.getGame().getLevelManager().windowFocusLost();
 			}
 		});
 	}

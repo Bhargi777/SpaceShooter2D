@@ -11,16 +11,21 @@ import UI.Resume;
 import levels.LevelManager;
 import utilz.LoadSave;
 
+/**
+ * Main game class that handles the game loop, window management, and state transitions.
+ * Controls the overall game flow and rendering.
+ */
 public class Game implements Runnable {
 	private GameWindow gameWindow;
-	private GamePanel gamePanel;
+	private final GamePanel gamePanel;
 	private Thread gameThread;
-	private LevelManager levelManager;
-	private BufferedImage backGroundImage;
-	private Menu menu;
-	private Resume resume;
+	private final LevelManager levelManager;
+	private final BufferedImage backGroundImage;
+	private final Menu menu;
+	private final Resume resume;
 	private volatile boolean running = true;
 
+	// Game loop settings
 	private final int FPS_SET = 120;
 	private final int UPS_SET = 200;
 
@@ -33,38 +38,59 @@ public class Game implements Runnable {
 	public static final int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
 	public static final int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 
-	/*
-		----------------Enum for Game States---------------
-	 enum --->	Java, an enum, short for enumeration, is a special data type used to define a set of named constants.
-	          	These constants represent a fixed number of possible values for a variable.
-	          	enum is a special 'class' that represents a group of constants (enumerated values).
-	*/
-	public enum GameState { MENU, GAME, RESUME, NEXT }
+	/**
+	 * Represents the different states the game can be in.
+	 */
+	public enum GameState { 
+		MENU,    // Main menu state
+		GAME,    // Active gameplay state
+		RESUME,  // Pause/resume menu state
+		NEXT     // Level transition state
+	}
+	
 	public static GameState state = GameState.MENU;
 
 	/*--------------------Constructor---------------------*/
 	public Game() {
+		// Initialize final fields
+		BufferedImage tempBackGroundImage = null;
+		Menu tempMenu = null;
+		Resume tempResume = null;
+		LevelManager tempLevelManager = null;
+		GamePanel tempGamePanel = null;
+		GameWindow tempGameWindow = null;
+
 		try {
-			initClasses();
-			gamePanel = new GamePanel(this);
-			gameWindow = new GameWindow(gamePanel);
-			gamePanel.requestFocus();
+			// Initialize game components
+			tempBackGroundImage = LoadSave.GetSpriteAtlas(LoadSave.UI_BACK_G);
+			if (tempBackGroundImage == null) {
+				throw new RuntimeException("Failed to load background image");
+			}
+			
+			tempMenu = new Menu();
+			tempResume = new Resume();
+			tempLevelManager = new LevelManager(this);
+			
+			// Create and setup game panel and window
+			tempGamePanel = new GamePanel(this);
+			tempGameWindow = new GameWindow(tempGamePanel);
+			tempGamePanel.requestFocus();
+			
+			// Start the game loop
 			startGameLoop();
-		} catch (Exception e) {
-			System.err.println("Error initializing game: " + e.getMessage());
+		} catch (RuntimeException e) {
+			System.err.println("Fatal error initializing game: " + e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
 		}
-	}
 
-	private void initClasses() {
-		backGroundImage = LoadSave.GetSpriteAtlas(LoadSave.UI_BACK_G);
-		if (backGroundImage == null) {
-			throw new RuntimeException("Failed to load background image");
-		}
-		menu = new Menu();
-		resume = new Resume();
-		levelManager = new LevelManager(this);
+		// Assign the final fields after successful initialization
+		this.backGroundImage = tempBackGroundImage;
+		this.menu = tempMenu;
+		this.resume = tempResume;
+		this.levelManager = tempLevelManager;
+		this.gamePanel = tempGamePanel;
+		this.gameWindow = tempGameWindow;
 	}
 
 	/*-----------------Creating & Starting Thread For Game---------------*/
@@ -78,7 +104,8 @@ public class Game implements Runnable {
 		try {
 			gameThread.join();
 		} catch (InterruptedException e) {
-			System.err.println("Error stopping game thread: " + e.getMessage());
+			Thread.currentThread().interrupt();
+			System.err.println("Game thread interrupted during shutdown: " + e.getMessage());
 		}
 	}
 
@@ -138,16 +165,21 @@ public class Game implements Runnable {
 					menu.update();
 					break;
 				case NEXT:
-					// Handle level transition or next state
+					handleNextState();
 					break;
 				default:
 					throw new IllegalStateException("Unknown game state: " + state);
 			}
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			System.err.println("Error in game update: " + e.getMessage());
 			e.printStackTrace();
-			// Don't exit the game, just log the error
 		}
+	}
+
+	private void handleNextState() {
+		// Transition to next level or game state
+		// This can be expanded to handle level progression
+		state = GameState.GAME;
 	}
 
 	/*render() ---> often relates to graphical user interfaces (GUIs) and involves drawing components or graphics onto the screen....*/
@@ -169,16 +201,21 @@ public class Game implements Runnable {
 					resume.render(g);
 					break;
 				case NEXT:
-					// Handle next state rendering
+					handleNextStateRendering(g);
 					break;
 				default:
 					throw new IllegalStateException("Unknown game state: " + state);
 			}
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			System.err.println("Error in game render: " + e.getMessage());
 			e.printStackTrace();
-			// Don't exit the game, just log the error
 		}
+	}
+
+	private void handleNextStateRendering(Graphics g) {
+		// Render transition effects or loading screen
+		// This can be expanded to show level transition animations
+		levelManager.draw(g);
 	}
 
 	/*------------Encapsulations (private fields with public getters/setter)---------------*/

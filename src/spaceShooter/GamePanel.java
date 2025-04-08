@@ -15,33 +15,48 @@ import javax.swing.JPanel;
 import inputs.KeyBoardinputs;
 import inputs.MouseInputs;
 
-
+/**
+ * GamePanel class handles the main game display area and input handling.
+ * Extends JPanel to provide custom rendering and input capabilities.
+ */
 public class GamePanel extends JPanel {
-	private MouseInputs mouseinputs;
-	private Game game;
+	private static final long serialVersionUID = 1L;
+	private final MouseInputs mouseInputs;
+	private final Game game;
 
-	/*---------------GamePanel Constructor, Here We're Handling KeyBoard & MouseInputs-------*/
+	/**
+	 * Creates a new GamePanel with the specified game instance.
+	 * Initializes input handlers and sets up the panel size.
+	 *
+	 * @param game The game instance to associate with this panel
+	 */
 	public GamePanel(Game game) {
-		mouseinputs=new MouseInputs(this);//
-	    this.game=game;
-		setPanelsize();
-	
-		addKeyListener(new KeyBoardinputs(this));
-		addMouseListener(mouseinputs);
-		addMouseMotionListener(mouseinputs);
+		if (game == null) {
+			throw new IllegalArgumentException("Game instance cannot be null");
+		}
+		
+		this.game = game;
+		this.mouseInputs = new MouseInputs(this);
+		
+		setPanelSize();
+		setupInputHandlers();
 	}
 
+	private void setupInputHandlers() {
+		addKeyListener(new KeyBoardinputs(this));
+		addMouseListener(mouseInputs);
+		addMouseMotionListener(mouseInputs);
+	}
 
-	/*This setPanelsize()---> method appears to be part of a class responsible for setting the size of a panel,
-	                          likely within a Swing or AWT-based graphical application.
+	/**
+	 * Sets the panel size to match the game dimensions.
+	 * Ensures consistent sizing across different platforms.
 	 */
-	private void setPanelsize() {
-		Dimension size=new Dimension(GAME_WIDTH,GAME_HEIGHT);
+	private void setPanelSize() {
+		Dimension size = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 		setMinimumSize(size);
-		setMaximumSize(size);
 		setPreferredSize(size);
-		System.out.println("size: "+GAME_WIDTH +" : "+ GAME_HEIGHT);
-		
+		setMaximumSize(size);
 	}
 
 	/*
@@ -59,12 +74,17 @@ public class GamePanel extends JPanel {
 
 
 	*/
-	public void paintComponent(Graphics g) {
+	@Override
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		game.render(g);
-		
 	}
 
+	/**
+	 * Returns the associated game instance.
+	 *
+	 * @return The game instance
+	 */
 	public Game getGame() {
 		return game;
 	}

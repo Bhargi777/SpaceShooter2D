@@ -76,7 +76,7 @@ public class MouseInputs extends Menu implements MouseListener, MouseMotionListe
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// Not used in this implementation
 	}
 
 	@Override
@@ -100,25 +100,26 @@ public class MouseInputs extends Menu implements MouseListener, MouseMotionListe
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// Not used in this implementation
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// Not used in this implementation
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// Not used in this implementation
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
+		// Not used in this implementation
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		// Not used in this implementation
 	}
 }
